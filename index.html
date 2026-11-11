@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Jalsa — your cozy circle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fbf3e8; --card:#fffaf3; --ink:#4a3b33; --soft:#8a7465; --line:#efdfcc;
+  --accent:#e07a5f; --accent2:#c9644a; --sage:#81b29a; --butter:#f2cc8f;
+  --shadow:0 6px 18px rgba(120,80,50,.10), 0 1px 3px rgba(120,80,50,.08);
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Nunito,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+body{background:radial-gradient(1200px 500px at 50% -10%,#fde3c8 0%,transparent 60%),var(--bg);min-height:100vh}
+#app{max-width:520px;margin:0 auto;padding:18px 16px 40px}
+h1,h2,h3{font-family:Fredoka,Nunito,sans-serif;font-weight:600;margin:0}
+h1{font-size:44px;letter-spacing:.5px;color:var(--accent2)}
+h2{font-size:22px}
+h3{font-size:15px;color:var(--soft);font-weight:500;margin:18px 0 8px;font-family:Nunito;font-weight:800;text-transform:uppercase;letter-spacing:.8px;font-size:12px}
+p{margin:6px 0;line-height:1.5}
+.sub{color:var(--soft);font-size:15px}
+.card{background:var(--card);border-radius:22px;box-shadow:var(--shadow);padding:16px;border:1px solid var(--line)}
+.hero{text-align:center;padding:10px 0 6px}
+.hero .scene{border-radius:24px;overflow:hidden;box-shadow:var(--shadow);margin:14px 0 4px}
+.row{display:flex;gap:10px;align-items:center}
+.between{justify-content:space-between}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.friend{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:10px 6px 10px;text-align:center;cursor:pointer;box-shadow:var(--shadow);transition:transform .15s}
+.friend:hover{transform:translateY(-2px)}
+.friend .nm{font-family:Fredoka;font-weight:600;font-size:16px;margin-top:2px}
+.friend .fd{font-size:12px;color:var(--soft);line-height:1.2}
+.friend.add{display:flex;flex-direction:column;align-items:center;justify-content:center;border:2px dashed #e6cdb2;background:transparent;box-shadow:none;color:var(--soft);min-height:150px;font-weight:700}
+.friend.add .plus{font-size:34px;line-height:1;color:var(--accent)}
+button{font-family:inherit;cursor:pointer;border:none}
+.btn{background:var(--accent);color:#fff;font-weight:800;font-size:17px;padding:14px 20px;border-radius:999px;box-shadow:0 4px 0 var(--accent2);width:100%;transition:transform .08s}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--accent2)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.ghost{background:#fff;color:var(--ink);box-shadow:0 3px 0 #e6cdb2;border:1px solid var(--line)}
+.btn.small{width:auto;font-size:14px;padding:9px 16px}
+.link{background:none;color:var(--soft);font-weight:700;font-size:15px;padding:6px 2px}
+input[type=text],textarea{width:100%;font-family:inherit;font-size:16px;padding:12px 14px;border-radius:14px;border:1.5px solid var(--line);background:#fff;color:var(--ink);outline:none}
+input[type=text]:focus,textarea:focus{border-color:var(--accent)}
+textarea{resize:none;min-height:70px}
+.sw{display:flex;flex-wrap:wrap;gap:8px}
+.dot{width:34px;height:34px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 1.5px var(--line);cursor:pointer}
+.dot.on{box-shadow:0 0 0 3px var(--accent)}
+.chip{background:#fff;border:1.5px solid var(--line);color:var(--ink);padding:8px 13px;border-radius:999px;font-weight:700;font-size:14px}
+.chip.on{background:var(--sage);border-color:var(--sage);color:#fff}
+.preview{display:flex;justify-content:center;background:linear-gradient(#fde8d2,#fbf3e8);border-radius:22px;padding:10px 0 0;margin-bottom:6px;border:1px solid var(--line)}
+.settings{display:grid;gap:12px}
+.setting{border-radius:22px;overflow:hidden;cursor:pointer;border:3px solid transparent;box-shadow:var(--shadow);background:var(--card);transition:transform .15s}
+.setting:hover{transform:translateY(-2px)}
+.setting.on{border-color:var(--accent)}
+.setting .lbl{padding:10px 14px;font-family:Fredoka;font-weight:600;font-size:18px;display:flex;justify-content:space-between;align-items:center}
+.setting .lbl span{font-family:Nunito;font-size:13px;color:var(--soft);font-weight:600}
+.inv{display:flex;align-items:center;gap:12px;background:var(--card);border:2px solid var(--line);border-radius:20px;padding:8px 14px 8px 8px;margin-bottom:10px;cursor:pointer}
+.inv.on{border-color:var(--sage);background:#f1f8f3}
+.inv .tick{margin-left:auto;width:28px;height:28px;border-radius:50%;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900}
+.inv.on .tick{background:var(--sage);border-color:var(--sage)}
+.sit .scene{border-radius:24px;overflow:hidden;box-shadow:var(--shadow)}
+.chat{margin-top:12px;display:flex;flex-direction:column;gap:10px;padding-bottom:90px}
+.msg{display:flex;gap:8px;align-items:flex-end;max-width:88%}
+.msg.me{align-self:flex-end;flex-direction:row-reverse}
+.bub{padding:10px 14px;border-radius:18px;line-height:1.45;font-size:15.5px;background:#fff;border:1px solid var(--line);box-shadow:0 1px 2px rgba(0,0,0,.03);white-space:pre-wrap;word-wrap:break-word}
+.msg.me .bub{background:var(--accent);color:#fff;border-color:var(--accent);border-bottom-right-radius:6px}
+.msg.them .bub{border-bottom-left-radius:6px}
+.who{font-size:12px;font-weight:800;margin:0 0 2px 4px}
+.note{align-self:center;font-size:13px;color:var(--soft);background:#f6e9da;padding:6px 12px;border-radius:999px;text-align:center}
+.typing{display:inline-flex;gap:4px}
+.typing i{width:7px;height:7px;border-radius:50%;background:#c9b19b;animation:b 1s infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes b{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
+.composer{position:fixed;left:0;right:0;bottom:0;background:linear-gradient(transparent,var(--bg) 30%);padding:14px 16px 16px}
+.composer .in{max-width:520px;margin:0 auto;display:flex;gap:8px}
+.composer input{border-radius:999px;padding:13px 18px;box-shadow:var(--shadow)}
+.send{background:var(--accent);color:#fff;border-radius:50%;width:50px;height:50px;flex:none;font-size:22px;box-shadow:0 3px 0 var(--accent2)}
+.send:disabled{opacity:.5}
+.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.pill{font-size:12px;font-weight:800;color:var(--soft);background:#f6e9da;padding:5px 10px;border-radius:999px}
+.mt{margin-top:14px}.mt2{margin-top:22px}
+.bob{animation:bob 3.2s ease-in-out infinite;transform-box:fill-box;transform-origin:bottom center}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-2.5px)}}
+.glow{animation:glow 2.4s ease-in-out infinite}
+@keyframes glow{0%,100%{opacity:.55}50%{opacity:1}}
+.foot{text-align:center;font-size:12px;color:#b59f8c;margin-top:26px}
+.err{color:var(--accent2);font-size:13px;font-weight:700;margin-top:6px}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+// ---------- data ----------
+const SKIN=['#f9dcc6','#efc3a1','#dba27c','#bb805a','#8f5c3d','#5f3c28'];
+const HAIRC=['#2b1d16','#5a3825','#8a5a32','#c98b4b','#e8c27a','#7a2e2e','#e6b8a2','#9fb8ad','#6d597a','#d8c3a5','#f4a7b9','#3d405b'];
+const OUTFIT=['#e07a5f','#f2cc8f','#81b29a','#3d405b','#a8d5e2','#c9a7eb','#f4a7b9','#fffaf3','#b5838d','#6b9080'];
+const HAIRS=[['short','Short'],['long','Long'],['curly','Curly'],['bun','Bun'],['hijab','Hijab'],['shaved','Shaved']];
+const EXTRAS=[['none','None'],['glasses','Glasses'],['beard','Beard'],['flower','Flower'],['kufi','Kufi cap']];
+const FIELDS=['Islamic scholar','Scientist','Neuroscientist','Doctor','Psychologist','Artist','Musician','Writer','Engineer','Entrepreneur','Athlete','Chef'];
+const TRAITS=['calm','wise','funny','motivating','curious','gentle','disciplined','creative','honest','playful','confident','patient'];
+const SETTINGS={
+  garden:{name:'Garden at sunset',tag:'calm & warm',desc:'on a picnic blanket in a garden at sunset'},
+  cafe:{name:'Cozy café',tag:'focused & chatty',desc:'around a little table in a cozy café'},
+  rooftop:{name:'Rooftop with lanterns',tag:'deep night talks',desc:'on cushions on a rooftop under lanterns at night'}
+};
+const DEFAULTS=[
+  {id:'f1',name:'Yusuf',field:'Islamic scholar',traits:['calm','wise','gentle'],skin:2,hair:'short',hc:0,outfit:7,extra:'beard',about:'Studied in Madinah, loves long walks after Fajr and asking good questions.'},
+  {id:'f2',name:'Layla',field:'Neuroscientist',traits:['curious','disciplined','motivating'],skin:1,hair:'hijab',hc:7,outfit:3,extra:'glasses',about:'Runs a sleep and memory lab. Plans her week every Sunday and never skips a morning run.'},
+  {id:'f3',name:'Omar',field:'Artist',traits:['playful','creative','patient'],skin:3,hair:'curly',hc:1,outfit:0,extra:'none',about:'Paints murals. Believes every failed sketch is practice for the good one.'}
+];
+const KEY='jalsa_v1';
+let S={screen:'home',me:'',friends:DEFAULTS.map(f=>({...f,traits:[...f.traits]})),setting:'garden',invited:[],chat:[],draft:null,busy:false};
+try{const d=JSON.parse(localStorage.getItem(KEY)||'null');if(d){if(Array.isArray(d.friends)&&d.friends.length)S.friends=d.friends;if(d.me)S.me=d.me;}}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify({friends:S.friends,me:S.me}))}catch(e){}}
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const me=()=>S.me.trim()||'you';
+const byId=id=>S.friends.find(f=>f.id===id);
+
+// ---------- avatar (viewBox 0 0 100 120) ----------
+function avatarInner(f){
+  const sk=SKIN[f.skin]||SKIN[1], hc=HAIRC[f.hc]||HAIRC[0], of=OUTFIT[f.outfit]||OUTFIT[0];
+  let back='',front='',ex='';
+  if(f.hair==='long') back=`<path d="M23 50 Q23 16 50 16 Q77 16 77 50 L79 94 Q50 102 21 94 Z" fill="${hc}"/>`;
+  if(f.hair==='hijab') back=`<path d="M21 52 Q21 13 50 13 Q79 13 79 52 L86 112 Q50 120 14 112 Z" fill="${hc}"/>`;
+  if(f.hair==='short'||f.hair==='long') front=`<path d="M25 47 Q25 21 50 21 Q75 21 75 47 Q70 33 52 32 Q44 38 33 36 Q28 40 25 47Z" fill="${hc}"/>`;
+  if(f.hair==='bun') front=`<circle cx="50" cy="17" r="10" fill="${hc}"/><path d="M25 47 Q25 21 50 21 Q75 21 75 47 Q68 32 50 32 Q32 32 25 47Z" fill="${hc}"/>`;
+  if(f.hair==='curly') front=[[29,40,9],[36,29,9],[48,24,10],[61,27,9],[70,37,9],[26,51,7],[74,50,7]].map(([x,y,r])=>`<circle cx="${x}" cy="${y}" r="${r}" fill="${hc}"/>`).join('');
+  if(f.hair==='shaved') front=`<path d="M26 46 Q26 23 50 23 Q74 23 74 46 Q70 30 50 29 Q30 30 26 46Z" fill="${hc}" opacity=".55"/>`;
+  if(f.hair==='hijab') front=`<path d="M25 49 Q25 22 50 22 Q75 22 75 49 Q71 29 50 29 Q29 29 25 49Z" fill="${hc}"/><path d="M26 57 Q29 77 50 79 Q71 77 74 57 L78 68 Q67 92 50 92 Q33 92 22 68Z" fill="${hc}"/><path d="M30 33 Q50 24 70 33" stroke="#fff" stroke-opacity=".25" stroke-width="2" fill="none"/>`;
+  if(f.extra==='beard') ex+=`<path d="M28 52 Q30 76 50 78 Q70 76 72 52 Q67 65 50 66 Q33 65 28 52Z" fill="${f.hair==='hijab'?HAIRC[0]:hc}"/>`;
+  const mouth=`<path d="M44 59.5 Q50 64.5 56 59.5" stroke="${f.extra==='beard'?'#f3d9c8':'#7a4a3a'}" stroke-width="2.2" fill="none" stroke-linecap="round"/>`;
+  if(f.extra==='glasses') ex+=`<g stroke="#3a2a22" stroke-width="1.8" fill="#fff" fill-opacity=".15"><circle cx="40.5" cy="50" r="6.5"/><circle cx="59.5" cy="50" r="6.5"/><path d="M47 50 L53 50" fill="none"/></g>`;
+  if(f.extra==='flower') ex+=`<g transform="translate(70 30)">${[0,72,144,216,288].map(a=>`<circle cx="${(5*Math.cos(a*Math.PI/180)).toFixed(1)}" cy="${(5*Math.sin(a*Math.PI/180)).toFixed(1)}" r="4" fill="#f4a7b9"/>`).join('')}<circle r="3" fill="#f2cc8f"/></g>`;
+  if(f.extra==='kufi') ex+=`<path d="M29 34 Q50 14 71 34 Q50 28 29 34Z" fill="#fffaf3" stroke="#e8d8c4" stroke-width="1"/>`;
+  return `${back}
+  <path d="M18 120 Q18 84 50 82 Q82 84 82 120 Z" fill="${of}"/>
+  <path d="M40 83 Q50 92 60 83" stroke="#000" stroke-opacity=".08" stroke-width="3" fill="none"/>
+  <rect x="44" y="68" width="12" height="16" rx="5" fill="${sk}"/>
+  <circle cx="50" cy="48" r="24" fill="${sk}"/>
+  <circle cx="26.5" cy="50" r="4" fill="${sk}"/><circle cx="73.5" cy="50" r="4" fill="${sk}"/>
+  ${front}
+  <circle cx="41" cy="50" r="2.8" fill="#3a2a22"/><circle cx="59" cy="50" r="2.8" fill="#3a2a22"/>
+  <circle cx="42" cy="49" r=".9" fill="#fff"/><circle cx="60" cy="49" r=".9" fill="#fff"/>
+  <ellipse cx="35" cy="57" rx="4.2" ry="2.4" fill="#f19b8f" opacity=".45"/><ellipse cx="65" cy="57" rx="4.2" ry="2.4" fill="#f19b8f" opacity=".45"/>
+  ${ex}${mouth}`;
+}
+const avatar=(f,w=90)=>`<svg viewBox="0 0 100 120" width="${w}" height="${w*1.2}" aria-label="${esc(f.name)}">${avatarInner(f)}</svg>`;
+const friendColor=f=>{const c=OUTFIT[f.outfit]||'#e07a5f';return (c==='#fffaf3'||c==='#f2cc8f'||c==='#a8d5e2')?'#b0805a':c};
+
+// ---------- scenes (viewBox 0 0 400 240) ----------
+function seats(friends){
+  const n=friends.length; if(!n) return '';
+  const gap=n>3?72:86;
+  return friends.map((f,i)=>{const x=200+(i-(n-1)/2)*gap;return `<g transform="translate(${x-36} 116) scale(.72)"><g class="bob" style="animation-delay:${i*.6}s">${avatarInner(f)}</g></g>`}).join('');
+}
+function scene(key,friends=[]){
+  if(key==='garden') return `<svg viewBox="0 0 400 240" width="100%" style="display:block">
+  <defs><linearGradient id="gs" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f3a683"/><stop offset=".55" stop-color="#f8cf9c"/><stop offset="1" stop-color="#fbe6c4"/></linearGradient></defs>
+  <rect width="400" height="240" fill="url(#gs)"/>
+  <circle cx="300" cy="118" r="40" fill="#fff3cf" opacity=".9"/><circle cx="300" cy="118" r="58" fill="#fff3cf" opacity=".25"/>
+  <ellipse cx="90" cy="175" rx="170" ry="50" fill="#b5d3a7"/><ellipse cx="330" cy="180" rx="160" ry="44" fill="#a6c99a"/>
+  <rect y="172" width="400" height="68" fill="#9cc59a"/>
+  <rect x="44" y="110" width="9" height="60" rx="4" fill="#9a6b4b"/><circle cx="48" cy="100" r="30" fill="#7fae7b"/><circle cx="30" cy="114" r="20" fill="#8cbb86"/><circle cx="66" cy="112" r="20" fill="#86b682"/>
+  <rect x="352" y="118" width="8" height="54" rx="4" fill="#9a6b4b"/><circle cx="356" cy="108" r="26" fill="#86b682"/><circle cx="340" cy="120" r="16" fill="#7fae7b"/>
+  ${[[20,200,'#f4a7b9'],[70,214,'#fff'],[120,224,'#f2cc8f'],[300,222,'#f4a7b9'],[350,206,'#fff'],[380,226,'#f2cc8f'],[95,190,'#f2cc8f'],[330,190,'#f4a7b9']].map(([x,y,c])=>`<circle cx="${x}" cy="${y}" r="4" fill="${c}"/><circle cx="${x}" cy="${y}" r="1.6" fill="#e0a43a"/>`).join('')}
+  <ellipse cx="200" cy="205" rx="${friends.length>3?170:140}" ry="24" fill="#e07a5f"/><ellipse cx="200" cy="205" rx="${friends.length>3?150:120}" ry="18" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="3" stroke-dasharray="10 8"/>
+  ${seats(friends)}
+  <g transform="translate(296 196)"><rect x="-14" y="-8" width="28" height="18" rx="5" fill="#c98b4b"/><path d="M-12 -8 Q0 -22 12 -8" stroke="#8a5a32" stroke-width="2.5" fill="none"/></g>
+  </svg>`;
+  if(key==='cafe') return `<svg viewBox="0 0 400 240" width="100%" style="display:block">
+  <defs><linearGradient id="cw" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ecc9a2"/><stop offset="1" stop-color="#e4b98e"/></linearGradient><linearGradient id="cs" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a8d5e2"/><stop offset="1" stop-color="#f8dcc0"/></linearGradient><radialGradient id="lg"><stop offset="0" stop-color="#fff1c9" stop-opacity=".9"/><stop offset="1" stop-color="#fff1c9" stop-opacity="0"/></radialGradient></defs>
+  <rect width="400" height="240" fill="url(#cw)"/>
+  <rect x="150" y="28" width="110" height="88" rx="10" fill="url(#cs)" stroke="#fffaf3" stroke-width="7"/><path d="M205 28 V116 M150 72 H260" stroke="#fffaf3" stroke-width="5"/>
+  <circle cx="232" cy="52" r="10" fill="#fff" opacity=".7"/>
+  <rect x="20" y="60" width="96" height="7" rx="3" fill="#a06c48"/>
+  <rect x="28" y="44" width="14" height="16" rx="3" fill="#e07a5f"/><rect x="48" y="40" width="12" height="20" rx="3" fill="#81b29a"/><rect x="66" y="46" width="16" height="14" rx="4" fill="#fffaf3"/><circle cx="96" cy="52" r="8" fill="#3d405b"/>
+  <rect x="300" y="60" width="80" height="7" rx="3" fill="#a06c48"/><path d="M318 60 q-10 -22 4 -26 q2 14 -4 26z M326 60 q4 -24 16 -20 q-6 12 -16 20z" fill="#81b29a"/><rect x="314" y="48" width="16" height="12" rx="3" fill="#c98b4b"/><rect x="350" y="44" width="10" height="16" rx="2" fill="#c9a7eb"/><rect x="362" y="48" width="10" height="12" rx="2" fill="#f2cc8f"/>
+  ${[90,320].map(x=>`<line x1="${x}" y1="0" x2="${x}" y2="88" stroke="#6b4a35" stroke-width="2"/><circle class="glow" cx="${x}" cy="104" r="40" fill="url(#lg)"/><path d="M${x-17} 102 Q${x} 76 ${x+17} 102 Z" fill="#f2cc8f"/><circle cx="${x}" cy="103" r="4" fill="#fff6dc"/>`).join('')}
+  <rect y="184" width="400" height="56" fill="#b98b62"/><path d="M0 184 H400" stroke="#a87a52" stroke-width="3"/>
+  ${[40,120,200,280,360].map(x=>`<path d="M${x} 186 V240" stroke="#a87a52" stroke-width="1.5" opacity=".6"/>`).join('')}
+  ${seats(friends)}
+  <ellipse cx="200" cy="200" rx="${friends.length>3?168:138}" ry="20" fill="#8a5a32"/><ellipse cx="200" cy="195" rx="${friends.length>3?168:138}" ry="18" fill="#a06c48"/>
+  <g transform="translate(170 178)"><rect x="-9" y="0" width="18" height="15" rx="4" fill="#fffaf3"/><path d="M9 4 q7 0 7 5 q0 4 -7 4" stroke="#fffaf3" stroke-width="3" fill="none"/><path d="M-3 -4 q3 -5 0 -9 M3 -4 q3 -5 0 -9" stroke="#fff" stroke-opacity=".7" stroke-width="1.6" fill="none"/></g>
+  <g transform="translate(236 182)"><ellipse rx="16" ry="5" fill="#fffaf3"/><circle cx="-5" cy="-4" r="5" fill="#c98b4b"/><circle cx="5" cy="-4" r="5" fill="#e8c27a"/></g>
+  </svg>`;
+  return `<svg viewBox="0 0 400 240" width="100%" style="display:block">
+  <defs><linearGradient id="rs" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2e2a4f"/><stop offset=".6" stop-color="#6d597a"/><stop offset="1" stop-color="#e8a87c"/></linearGradient></defs>
+  <rect width="400" height="240" fill="url(#rs)"/>
+  ${[[30,24],[80,50],[140,18],[210,40],[260,14],[330,34],[370,62],[110,80],[180,70],[300,76],[50,92]].map(([x,y],i)=>`<circle class="glow" style="animation-delay:${i*.3}s" cx="${x}" cy="${y}" r="${i%3?1.3:2}" fill="#fff"/>`).join('')}
+  <circle cx="330" cy="58" r="20" fill="#fff6dc"/><circle cx="339" cy="52" r="18" fill="#3e3660"/>
+  <g fill="#3d3355">${[[0,128,40,60],[36,112,30,76],[62,136,44,52],[100,120,26,68],[250,124,36,64],[282,108,28,80],[306,132,46,56],[350,118,50,70]].map(([x,y,w,h])=>`<rect x="${x}" y="${y}" width="${w}" height="${h}"/>`).join('')}</g>
+  <g fill="#f2cc8f" opacity=".75">${[[10,140],[46,124],[74,150],[108,132],[262,136],[290,122],[318,146],[362,132],[376,150]].map(([x,y])=>`<rect x="${x}" y="${y}" width="5" height="6" rx="1"/>`).join('')}</g>
+  <path d="M0 40 Q100 100 200 70 Q300 40 400 96" stroke="#2a2440" stroke-width="1.5" fill="none"/>
+  ${[[30,58],[70,76],[115,84],[160,78],[205,69],[250,58],[295,56],[340,68],[380,86]].map(([x,y],i)=>`<g class="glow" style="animation-delay:${i*.25}s"><circle cx="${x}" cy="${y+10}" r="12" fill="#ffd27d" opacity=".25"/><rect x="${x-5}" y="${y+2}" width="10" height="14" rx="4" fill="${['#ffd27d','#f4a7b9','#f2cc8f'][i%3]}"/></g>`).join('')}
+  <rect y="176" width="400" height="64" fill="#c9a27e"/><rect y="170" width="400" height="10" fill="#b38b66"/>
+  <ellipse cx="200" cy="214" rx="${friends.length>3?180:150}" ry="22" fill="#b5838d"/><ellipse cx="200" cy="214" rx="${friends.length>3?160:130}" ry="15" fill="none" stroke="#f2cc8f" stroke-width="2.5" stroke-dasharray="4 6"/>
+  ${seats(friends)}
+  <g transform="translate(200 214)"><circle r="9" fill="#fff6dc" opacity=".4"/><rect x="-4" y="-10" width="8" height="12" rx="2" fill="#fffaf3"/><path d="M0 -10 q3 -5 0 -9 q-3 4 0 9" fill="#ffb347"/></g>
+  </svg>`;
+}
+
+// ---------- screens ----------
+function render(){
+  const a=document.getElementById('app');
+  if(S.screen==='home') a.innerHTML=home();
+  else if(S.screen==='create') a.innerHTML=create();
+  else if(S.screen==='setting') a.innerHTML=settingScreen();
+  else if(S.screen==='invite') a.innerHTML=invite();
+  else if(S.screen==='sit') {a.innerHTML=sit(); scrollEnd(); const i=document.getElementById('msg'); if(i&&!S.busy) i.focus({preventScroll:true});}
+  window.scrollTo&&S.screen!=='sit'&&window.scrollTo(0,0);
+}
+function home(){
+  return `<div class="hero"><h1>Jalsa</h1><p class="sub">Your cozy circle of friends. Create them, pick a place, and sit together.</p>
+  <div class="scene">${scene('garden',S.friends.slice(0,3))}</div></div>
+  <h3>What should your friends call you?</h3>
+  <input type="text" id="me" dir="auto" placeholder="Your name" value="${esc(S.me)}" maxlength="30">
+  <div class="row between mt2"><h2>Your friends</h2><span class="pill">${S.friends.length} friend${S.friends.length===1?'':'s'}</span></div>
+  <div class="grid mt">${S.friends.map(f=>`<div class="friend" data-act="edit" data-id="${f.id}">${avatar(f,78)}<div class="nm">${esc(f.name)}</div><div class="fd">${esc(f.field)}</div></div>`).join('')}
+  <div class="friend add" data-act="new"><div class="plus">+</div>New friend</div></div>
+  <div class="mt2"><button class="btn" data-act="start" ${S.friends.length?'':'disabled'}>Start a sitting →</button></div>
+  <p class="foot">Prototype · your friends are AI characters, here to help you grow (not to replace your real ones).</p>`;
+}
+function create(){
+  const d=S.draft, isNew=!byId(d.id);
+  const sw=(arr,key)=>`<div class="sw">${arr.map((c,i)=>`<div class="dot ${d[key]===i?'on':''}" style="background:${c}" data-act="set" data-k="${key}" data-v="${i}"></div>`).join('')}</div>`;
+  const chips=(arr,key)=>`<div class="sw">${arr.map(([v,l])=>`<button class="chip ${d[key]===v?'on':''}" data-act="setv" data-k="${key}" data-v="${v}">${l}</button>`).join('')}</div>`;
+  return `<div class="top"><button class="link" data-act="home">← Back</button><span class="pill">${isNew?'New friend':'Edit friend'}</span></div>
+  <div class="preview">${avatar(d,150)}</div>
+  <h3>Name</h3><input type="text" id="fname" dir="auto" maxlength="20" placeholder="e.g. Noor" value="${esc(d.name)}">
+  <h3>Skin</h3>${sw(SKIN,'skin')}
+  <h3>Hair</h3>${chips(HAIRS,'hair')}
+  <h3>${d.hair==='hijab'?'Hijab colour':'Hair colour'}</h3>${sw(HAIRC,'hc')}
+  <h3>Outfit</h3>${sw(OUTFIT,'outfit')}
+  <h3>Extra</h3>${chips(EXTRAS,'extra')}
+  <h3>What are they successful at?</h3><div class="sw">${FIELDS.map(x=>`<button class="chip ${d.field===x?'on':''}" data-act="field" data-v="${esc(x)}">${x}</button>`).join('')}</div>
+  <input type="text" id="ffield" class="mt" dir="auto" maxlength="40" placeholder="…or type your own" value="${FIELDS.includes(d.field)?'':esc(d.field)}">
+  <h3>Personality (pick up to 3)</h3><div class="sw">${TRAITS.map(t=>`<button class="chip ${d.traits.includes(t)?'on':''}" data-act="trait" data-v="${t}">${t}</button>`).join('')}</div>
+  <h3>Their story (optional)</h3><textarea id="fabout" dir="auto" maxlength="240" placeholder="What are their habits? What do they believe?">${esc(d.about||'')}</textarea>
+  <div id="ferr" class="err"></div>
+  <div class="mt2"><button class="btn" data-act="savef">${isNew?'Add to my circle':'Save changes'}</button></div>
+  ${!isNew?`<div class="mt" style="text-align:center"><button class="link" data-act="delf">Remove ${esc(d.name)} from my circle</button></div>`:''}`;
+}
+function settingScreen(){
+  return `<div class="top"><button class="link" data-act="home">← Back</button><span class="pill">Step 1 of 2</span></div>
+  <h2>Where are you sitting?</h2><p class="sub">Each place has its own mood.</p>
+  <div class="settings mt">${Object.entries(SETTINGS).map(([k,s])=>`<div class="setting ${S.setting===k?'on':''}" data-act="pick" data-v="${k}">${scene(k)}<div class="lbl">${s.name}<span>${s.tag}</span></div></div>`).join('')}</div>
+  <div class="mt2"><button class="btn" data-act="toinvite">Next: invite friends →</button></div>`;
+}
+function invite(){
+  return `<div class="top"><button class="link" data-act="start">← Back</button><span class="pill">Step 2 of 2</span></div>
+  <h2>Who's joining you?</h2><p class="sub">Invite one friend for a close talk, or a few for a group sitting.</p>
+  <div class="mt">${S.friends.map(f=>{const on=S.invited.includes(f.id);return `<div class="inv ${on?'on':''}" data-act="inv" data-id="${f.id}">${avatar(f,52)}<div><div style="font-family:Fredoka;font-weight:600;font-size:17px">${esc(f.name)}</div><div class="sub" style="font-size:13px;margin:0">${esc(f.field)} · ${esc(f.traits.join(', '))}</div></div><div class="tick">${on?'✓':''}</div></div>`}).join('')}</div>
+  <div class="mt2"><button class="btn" data-act="sit" ${S.invited.length?'':'disabled'}>Sit down together</button></div>
+  ${S.invited.length>4?`<p class="sub" style="text-align:center;font-size:13px">Tip: smaller sittings feel more personal.</p>`:''}`;
+}
+function sit(){
+  const fr=S.invited.map(byId).filter(Boolean);
+  return `<div class="sit"><div class="top"><button class="link" data-act="leave">← Leave</button><span class="pill">${SETTINGS[S.setting].name}</span></div>
+  <div class="scene">${scene(S.setting,fr)}</div>
+  <div class="chat" id="chat">${chatHTML()}</div></div>
+  <div class="composer"><form class="in" id="comp"><input type="text" id="msg" dir="auto" autocomplete="off" placeholder="Say something to ${fr.length>1?'everyone':esc(fr[0]?.name||'')}…" ${S.busy?'disabled':''}><button class="send" ${S.busy?'disabled':''} aria-label="Send">➤</button></form></div>`;
+}
+function chatHTML(){
+  return S.chat.map(m=>{
+    if(m.type==='note') return `<div class="note">${esc(m.text)}</div>`;
+    if(m.type==='me') return `<div class="msg me"><div class="bub" dir="auto">${esc(m.text)}</div></div>`;
+    const f=byId(m.id)||{name:m.name||'Friend',skin:1,hair:'short',hc:0,outfit:0,extra:'none'};
+    return `<div class="msg them">${avatar(f,34)}<div><div class="who" style="color:${friendColor(f)}">${esc(f.name)}</div><div class="bub" dir="auto">${esc(m.text)}</div></div></div>`;
+  }).join('')+(S.busy?`<div class="msg them"><div class="bub"><span class="typing"><i></i><i></i><i></i></span></div></div>`:'');
+}
+function refreshChat(){const c=document.getElementById('chat');if(c){c.innerHTML=chatHTML();}const i=document.getElementById('msg'),b=document.querySelector('.send');if(i){i.disabled=S.busy;if(!S.busy)i.focus({preventScroll:true})}if(b)b.disabled=S.busy;scrollEnd();}
+function scrollEnd(){requestAnimationFrame(()=>window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'}))}
+
+// ---------- AI ----------
+let samplerP=null;
+function getSampler(){
+  if(!samplerP){samplerP=(window.claude&&typeof window.claude.use==='function')?window.claude.use('sample').catch(()=>null):Promise.resolve(null);}
+  return samplerP;
+}
+function buildPrompt(trigger){
+  const fr=S.invited.map(byId).filter(Boolean), n=fr.length;
+  const desc=fr.map(f=>`- ${f.name}: successful ${f.field}; personality: ${f.traits.join(', ')||'warm'}${f.about?'; their story: '+f.about:''}`).join('\n');
+  const tr=S.chat.filter(m=>m.type!=='note').slice(-20).map(m=>m.type==='me'?`${me()}: ${m.text}`:`${(byId(m.id)||{}).name||'Friend'}: ${m.text}`).join('\n')||'(nothing yet)';
+  return `You are writing the next lines of a cozy, warm chat game called Jalsa. The player, ${me()}, is sitting ${SETTINGS[S.setting].desc} with these AI friends:
+${desc}
+
+Each friend is a successful, kind person in their field and stays fully in their own character and voice. They show their traits naturally through how they talk and by sharing their own habits and experiences, not by lecturing. Write like close friends texting: warm, short (1 to 3 sentences each), sometimes playful, often asking ${me()} something back. Friends can react to each other. Reply in the same language ${me()} uses (Arabic, English, or a mix).
+
+Rules: An Islamic scholar friend shares perspectives gently from the Quran, Sunnah and scholars, and for personal religious rulings suggests asking a qualified scholar. If ${me()} mentions wanting to hurt themselves or being in danger, every friend drops the game tone, responds with real care, and urges them to reach someone they trust or local emergency services right now. Gently encourage real-life action and real friendships; never encourage depending on this chat.
+
+Conversation so far:
+${tr}
+
+${trigger}
+
+Return ONLY JSON, no other text: {"replies":[{"friend":"<exact friend name>","text":"<message>"}]} with ${n===1?'exactly 1 reply':`1 to ${Math.min(3,n)} replies from the friends who would naturally respond (not always everyone, vary the order)`}.`;
+}
+function parseReplies(text){
+  const m=String(text||'').match(/\{[\s\S]*\}/); if(!m) return [];
+  try{const j=JSON.parse(m[0]);return Array.isArray(j.replies)?j.replies:[]}catch(e){return []}
+}
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+async function askFriends(trigger){
+  S.busy=true; refreshChat();
+  const fr=S.invited.map(byId).filter(Boolean);
+  try{
+    const sample=await getSampler();
+    if(!sample){S.chat.push({type:'note',text:'Your friends need AI access to talk. Open this page on claude.ai and allow it when asked.'});return;}
+    const res=await sample([{role:'user',content:buildPrompt(trigger)}],{modelTier:'quick',cache:false});
+    const reps=parseReplies(res&&res.text);
+    if(!reps.length){S.chat.push({type:'note',text:'Hmm, nobody heard that. Try saying it again.'});return;}
+    for(let i=0;i<reps.length;i++){
+      const r=reps[i]; const f=fr.find(x=>x.name.toLowerCase()===String(r.friend||'').trim().toLowerCase())||fr[i%fr.length];
+      if(i>0){S.busy=true;refreshChat();await wait(700+Math.min(1400,String(r.text).length*12));}
+      S.chat.push({type:'them',id:f.id,text:String(r.text||'').trim()});
+      if(i<reps.length-1) refreshChat();
+    }
+  }catch(e){
+    const c=e&&e.code;
+    S.chat.push({type:'note',text:c==='not_granted'?'AI access was not allowed, so your friends can\'t reply yet.':c==='rate_limited'?'Your friends need a short break. Try again in a minute.':'Something went wrong. Try again.'});
+  }finally{S.busy=false;refreshChat();}
+}
+
+// ---------- events ----------
+document.addEventListener('input',e=>{
+  if(e.target.id==='me'){S.me=e.target.value;save();}
+  if(S.draft){if(e.target.id==='fname'){S.draft.name=e.target.value;} if(e.target.id==='fabout'){S.draft.about=e.target.value;} if(e.target.id==='ffield'){S.draft.field=e.target.value; document.querySelectorAll('[data-act=field]').forEach(b=>b.classList.toggle('on',b.dataset.v===S.draft.field));}}
+});
+function syncDraftInputs(){const g=id=>document.getElementById(id);if(!S.draft)return;if(g('fname'))S.draft.name=g('fname').value;if(g('fabout'))S.draft.about=g('fabout').value;}
+function rerenderKeepScroll(){const y=window.scrollY;render();window.scrollTo(0,y);}
+document.addEventListener('click',e=>{
+  const t=e.target.closest('[data-act]'); if(!t) return;
+  const act=t.dataset.act, v=t.dataset.v;
+  if(act==='home'){S.draft=null;S.screen='home';render();}
+  else if(act==='new'){S.draft={id:'f'+Date.now(),name:'',field:'Scientist',traits:[],skin:Math.floor(Math.random()*SKIN.length),hair:'long',hc:Math.floor(Math.random()*6),outfit:Math.floor(Math.random()*OUTFIT.length),extra:'none',about:''};S.screen='create';render();}
+  else if(act==='edit'){const f=byId(t.dataset.id);S.draft={...f,traits:[...f.traits]};S.screen='create';render();}
+  else if(act==='set'){syncDraftInputs();S.draft[t.dataset.k]=+v;rerenderKeepScroll();}
+  else if(act==='setv'){syncDraftInputs();S.draft[t.dataset.k]=v;rerenderKeepScroll();}
+  else if(act==='field'){syncDraftInputs();S.draft.field=v;rerenderKeepScroll();}
+  else if(act==='trait'){syncDraftInputs();const tr=S.draft.traits;if(tr.includes(v))tr.splice(tr.indexOf(v),1);else{if(tr.length>=3)tr.shift();tr.push(v);}rerenderKeepScroll();}
+  else if(act==='savef'){
+    syncDraftInputs();const d=S.draft;d.name=d.name.trim();d.field=(d.field||'').trim();
+    const err=document.getElementById('ferr');
+    if(!d.name){err.textContent='Give your friend a name.';return;}
+    if(!d.field){err.textContent='Choose what they are successful at.';return;}
+    if(S.friends.some(f=>f.id!==d.id&&f.name.toLowerCase()===d.name.toLowerCase())){err.textContent='You already have a friend with that name.';return;}
+    const i=S.friends.findIndex(f=>f.id===d.id); if(i>=0)S.friends[i]=d; else S.friends.push(d);
+    save();S.draft=null;S.screen='home';render();
+  }
+  else if(act==='delf'){S.friends=S.friends.filter(f=>f.id!==S.draft.id);S.invited=S.invited.filter(id=>id!==S.draft.id);save();S.draft=null;S.screen='home';render();}
+  else if(act==='start'){S.screen='setting';render();}
+  else if(act==='pick'){S.setting=v;rerenderKeepScroll();}
+  else if(act==='toinvite'){S.invited=S.invited.filter(id=>byId(id));S.screen='invite';render();}
+  else if(act==='inv'){const id=t.dataset.id;S.invited=S.invited.includes(id)?S.invited.filter(x=>x!==id):[...S.invited,id];rerenderKeepScroll();}
+  else if(act==='sit'){
+    const fr=S.invited.map(byId).filter(Boolean);
+    const names=fr.map(f=>f.name);const list=names.length>1?names.slice(0,-1).join(', ')+' and '+names.slice(-1):names[0];
+    S.chat=[{type:'note',text:`You sit down ${SETTINGS[S.setting].desc} with ${list}.`}];
+    S.screen='sit';render();
+    askFriends(`The sitting has just started. ${fr.length>1?'The friends greet':'Your friend greets'} ${me()} warmly and settle in.`);
+  }
+  else if(act==='leave'){S.chat=[];S.screen='home';render();}
+});
+document.addEventListener('submit',e=>{
+  if(e.target.id!=='comp')return; e.preventDefault();
+  const i=document.getElementById('msg'); const text=i.value.trim(); if(!text||S.busy) return;
+  S.chat.push({type:'me',text}); i.value='';
+  askFriends('Write what the friends say next, responding to the last message.');
+});
+render();
+</script>
+</body>
+</html>
